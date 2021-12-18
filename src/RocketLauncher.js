@@ -12,8 +12,8 @@ class RocketLauncher {
   }
 
   launchRocketByQueue () {
-    const rocket = this.rocket.shift()
-    rocket.engineStatus = 'active'
+    const rockets = this.rockets.shift()
+    rockets.engineStatus = 'active'
   }
 }
 
