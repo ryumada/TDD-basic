@@ -55,4 +55,37 @@ describe('A RocketLauncher', () => {
     // Assert
     expect(result).toEqual('there was 1 of 1 rocket fail to repair')
   })
+
+  // mock example
+  it('should repair some repairable rocket when repair kit cannot repair some the rocket', async () => {
+    // Arrange
+    const repairableRocket = new Rocket('repairableRocket')
+    const unrepairableRocket = new Rocket('unrepairableRocket')
+    /**
+     * Mock?! Kita butuh mengubah implementasi fungsi untuk menghasilkan keadaan sesuai skenario uji
+     * dan kita butuh untuk menguji apakah fungsi yang dijalankan/diperlakukan
+     */
+    const fakeRocketRepairKit = {
+      repair: jest.fn().mockImplementation((rocket) => {
+        if (rocket.name === 'repairableRocket') {
+          return Promise.resolve()
+        }
+
+        return Promise.reject(new Error('failed to repair the rocket'))
+      })
+    }
+
+    const rocketLauncher = new RocketLauncher(fakeRocketRepairKit, [repairableRocket, unrepairableRocket])
+
+    // Action
+    const result = await rocketLauncher.repairAllRockets()
+
+    // Assert
+    expect(result).toEqual('there was 1 of 2 rocket fail to repair')
+    /**
+     * memastikan bahwa fungsi repair terpanggil
+     */
+    expect(fakeRocketRepairKit.repair).toBeCalled()
+    expect(fakeRocketRepairKit.repair).toBeCalledWith(repairableRocket)
+  })
 })
