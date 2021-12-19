@@ -1,5 +1,6 @@
 const Rocket = require('./Rocket')
 const RocketLauncher = require('./RocketLauncher')
+const RocketRepairKit = require('./RocketRepairKit')
 
 describe('A RocketLauncher', () => {
   it('should launch all rockets', () => {
@@ -56,7 +57,9 @@ describe('A RocketLauncher', () => {
     expect(result).toEqual('there was 1 of 1 rocket fail to repair')
   })
 
-  // mock example
+  // mock example, don't mock everything?!, try spy first or stub before doin the mock?!
+  // sebelum melakukan mock, pastikan apakah objek memerlukan akses dari teknologi luar (seperti database atau network)
+  // selalu utamakan menggunakan objek asli ketimbang fake
   it('should repair some repairable rocket when repair kit cannot repair some the rocket', async () => {
     // Arrange
     const repairableRocket = new Rocket('repairableRocket')
@@ -87,5 +90,29 @@ describe('A RocketLauncher', () => {
      */
     expect(fakeRocketRepairKit.repair).toBeCalled()
     expect(fakeRocketRepairKit.repair).toBeCalledWith(repairableRocket)
+  })
+
+  // spy example
+  it('should repair all the rockets with repair kit correctly', async () => {
+    // Arrange
+    const nasaRocket = new Rocket('Nasa')
+    const spaceXRocket = new Rocket('spaceXRocket')
+    // menggunakan objek real
+    const rocketRepairKit = new RocketRepairKit({}, {}, {})
+    /**
+     * Spy?! Memata-matai fungsi repair pada objek RocketRepairKit
+     * Tujuannya, untuk memastikan fungsi repair dijalankan
+     */
+    const spyRepair = jest.spyOn(rocketRepairKit, 'repair')
+    const rocketLauncher = new RocketLauncher(rocketRepairKit, [nasaRocket, spaceXRocket])
+
+    // Action
+    const result = await rocketLauncher.repairAllRockets()
+
+    // Assert
+    expect(spyRepair).toBeCalledTimes(2)
+    expect(spyRepair).toBeCalledWith(nasaRocket)
+    expect(spyRepair).toBeCalledWith(spaceXRocket)
+    expect(result).toEqual('all rocket repaired')
   })
 })
