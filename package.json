@@ -4,6 +4,7 @@
   "description": "MathBasic app",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
     "test": "jest -o",
     "test-watch": "jest --watchAll --coverage",
     "test-all": "jest --coverage"
