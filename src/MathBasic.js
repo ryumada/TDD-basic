@@ -17,7 +17,7 @@ const MathBasic = {
 
     return a + b
   },
-  substract: (...args) => {
+  subtract: (...args) => {
     const [a, b] = MathBasic._validateArgs(args)
 
     return a - b
